@@ -1,8 +1,9 @@
 package com.ts.template.config;
 
 import cn.hutool.json.JSONUtil;
+import com.ts.template.utils.IdFactory;
 import com.ts.template.utils.ResCode;
-import com.ts.template.utils.ResultEntry;
+import com.ts.template.utils.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 @RestControllerAdvice(basePackages = "com.ts.template.controller")
@@ -44,8 +47,9 @@ public class CommonResponseDataAdvice implements ResponseBodyAdvice<Object> {
                                   Class<? extends HttpMessageConverter<?>> aClass,
                                   ServerHttpRequest serverHttpRequest,
                                   ServerHttpResponse serverHttpResponse) {
-        if (!(o instanceof ResultEntry)) {
-            ResultEntry responseResult = new ResultEntry(200, o);
+
+        if (!(o instanceof ResponseMessage)) {
+            ResponseMessage responseResult = new ResponseMessage(true, o);
             //因为handler处理类的返回类型是String，为了保证一致性，这里需要将ResponseResult转回去
             if (o instanceof String) {
                 return JSONUtil.toJsonPrettyStr(responseResult);
@@ -81,8 +85,8 @@ public class CommonResponseDataAdvice implements ResponseBodyAdvice<Object> {
         }
         log.error("异常Parameter:" +sb2.toString());
         log.error("异常堆栈:", e);
-        return new ResultEntry<>(ResCode.CODE_7567,
-                ResCode.getVal(ResCode.CODE_7567) + System.getProperty("line.separator") + e.getMessage());
+        return new ResponseMessage<>(false,null,ResCode.CODE_7567,
+                ResCode.getVal(ResCode.CODE_7567) + System.getProperty("line.separator") + e.getMessage(),0);
     }
 
 }

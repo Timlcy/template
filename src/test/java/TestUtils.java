@@ -331,7 +331,7 @@ public class TestUtils {
             swineClaimoccupation.setNumber(countMap.get(key).intValue());
 //            swineClaimoccupation.setClaimedflag(saveOrSumbit);
 //            swineClaimoccupation.setToolclaimId(swinePlanjob.getToolclaimId());
-            swineClaimoccupation.setId(IdFactory.getSimpleUUID());
+            swineClaimoccupation.setId(IdFactory.getSnowflake());
             return swineClaimoccupation;
         }).collect(Collectors.toList());
 

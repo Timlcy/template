@@ -1,5 +1,6 @@
 package com.ts.template.utils;
 
+import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 
 /**
@@ -11,27 +12,19 @@ import cn.hutool.core.util.IdUtil;
  **/
 public class IdFactory {
 
-    /**
-     * 生成资产编号
-     *
-     * @param id 类型ID
-     * @return 资产编号
-     */
-    public static String getSpecification(String id) {
-        return id + '-' + IdUtil.simpleUUID();
-    }
-
 
     /**
-     * 生成简单UUID
+     * Twitter的Snowflake 算法
      *
-     * @return 生成简单UUID
+     * @return 分布式ID
      */
-    public static String getSimpleUUID() {
-        return IdUtil.simpleUUID();
+    public static String getSnowflake() {
+        //参数1为终端ID
+        //参数2为数据中心ID
+        Snowflake snowflake = IdUtil.getSnowflake(0, 0);
+        long id = snowflake.nextId();
+        return id + "";
     }
-
-
 
 
 }

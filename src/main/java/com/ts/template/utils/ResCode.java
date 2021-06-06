@@ -6,34 +6,34 @@ import java.util.Map;
 public class ResCode {
 
 	//数据库CRUD状态码
-	public static final Integer CODE_7531 = 7531;
-	public static final Integer CODE_7532 = 7532;
-	public static final Integer CODE_7533 = 7533;
-	public static final Integer CODE_7534 = 7534;
-	public static final Integer CODE_7535 = 7535;
-	public static final Integer CODE_7536 = 7536;
-	public static final Integer CODE_7537 = 7537;
-	public static final Integer CODE_7538 = 7538;
+	public static final String CODE_7531 = "7531";
+	public static final String CODE_7532 = "7532";
+	public static final String CODE_7533 = "7533";
+	public static final String CODE_7534 = "7534";
+	public static final String CODE_7535 = "7535";
+	public static final String CODE_7536 = "7536";
+	public static final String CODE_7537 = "7537";
+	public static final String CODE_7538 = "7538";
 	
 	//校验状态码
-	public static final Integer CODE_7551 = 7551;
-	public static final Integer CODE_7552 = 7552;
-	public static final Integer CODE_7553 = 7553;
-	public static final Integer CODE_7554 = 7554;
-	public static final Integer CODE_7555 = 7555;
-	public static final Integer CODE_7556 = 7556;
-	public static final Integer CODE_7557 = 7557;
+	public static final String CODE_7551 = "7551";
+	public static final String CODE_7552 = "7552";
+	public static final String CODE_7553 = "7553";
+	public static final String CODE_7554 = "7554";
+	public static final String CODE_7555 = "7555";
+	public static final String CODE_7556 = "7556";
+	public static final String CODE_7557 = "7557";
 
 	/** ———————Network状态码Start——————— */
 
 	//服务器错误
-	public static final Integer CODE_7567 = 7567;
+	public static final String CODE_7567 = "7567";
 	//参数校验错误
-	public static final Integer CODE_7568 = 7568;
+	public static final String CODE_7568 = "7568";
 
 	/** ———————Network状态码End——————— */
 
-	public static Map<Integer,String> codeMap = new HashMap<Integer,String>();
+	public static Map<String,String> codeMap = new HashMap<>();
 	
 	static {
 		codeMap.put(CODE_7531, "添加成功");
@@ -56,7 +56,7 @@ public class ResCode {
 		codeMap.put(CODE_7568, "参数校验错误");
 	}
 	
-	public static String getVal (Integer key) {
+	public static String getVal (String key) {
 		return codeMap.get(key);
 	}
 }
