@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: template
+  labels:
+    name: template
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 31025
+  selector:
+    app: template-dep
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: template-dep
+  labels:
+    app: template-dep
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: template-dep
+  template:
+    metadata:
+      labels:
+        app: template-dep
+        version: v1.0.0
+    spec:
+      containers:
+        - name: template
+          image: swine:5000/template:v1
+          ports:
+            - containerPort: 8080
