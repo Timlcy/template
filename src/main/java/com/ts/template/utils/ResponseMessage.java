@@ -1,28 +1,50 @@
 package com.ts.template.utils;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-@Schema(title = "返回信息")
+/**
+ * 返回信息
+ * @author timlcy
+ */
+@Data
 public class ResponseMessage<T> {
-	@Schema(title = "是否成功")
+
+
+	/**
+	 * 是否成功
+	 */
 	private boolean success;
-	@Schema(title = "数据")
+	/**
+	 * 数据
+	 */
 	private T data;
-	@Schema(title = "错误码")
+	/**
+	 * 数据
+	 */
 	private String errorCode;
-	@Schema(title = "错误信息")
+	/**
+	 * 错误信息
+	 *
+	 */
 	private String errorMessage;
-	// error display type： 0 silent; 1 message.warn; 2 message.error; 4 notification; 9 page
-	@Schema(title = "错误信息显示类型")
+	//
+	/**
+	 * 错误信息显示类型
+	 * error display type： 0 silent; 1 message.warn; 2 message.error; 4 notification; 9 page
+	 */
 	private int showType;
-	// Convenient for back-end Troubleshooting: unique request ID
-	@Schema(title = "惟一请求ID")
+	/**
+	 * 惟一请求ID
+	 * Convenient for back-end Troubleshooting: unique request ID
+	 */
 	private  String traceId;
-	// onvenient for backend Troubleshooting: host of current access server
-	@Schema(title = "当前访问服务器的主机")
+	/**
+	 * 当前访问服务器的主机
+	 * onvenient for backend Troubleshooting: host of current access server
+	 */
 	private  String host;
 
 
