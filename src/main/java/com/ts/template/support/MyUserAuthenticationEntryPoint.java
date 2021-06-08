@@ -1,17 +1,17 @@
 package com.ts.template.support;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
+import lombok.SneakyThrows;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.util.PathMatcher;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 /***
  * 没有携带token的处理类
@@ -27,26 +27,34 @@ import java.nio.charset.StandardCharsets;
 @Component
 public class MyUserAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+
+    @SneakyThrows
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException {
-        String url = request.getRequestURI();
-        PathMatcher pathMatcher = new AntPathMatcher();
-        System.out.println(url);
-        String pathPatter = "/*/page/**";
-        System.out.println(pathPatter);
-        if (pathMatcher.match(pathPatter, url)) {
-            System.out.println("路由不对跳转到登录页面");
-            response.sendRedirect("/auth/page/login?url=" + url);
+                         AuthenticationException authException) {
+        Map<String, Object> map = new HashMap<>();
+        Throwable cause = authException.getCause();
+        if (cause instanceof InvalidTokenException) {
+            map.put("code", 401);//401
+            map.put("msg", "无效的token");
+
         } else {
-            String errMsg = "请求头没有token令牌，请先登录";
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json;charset=UTF-8");
-            JSONObject res = new JSONObject();
-            res.put("state", "false");
-            res.put("code", HttpServletResponse.SC_UNAUTHORIZED);
-            res.put("msg", errMsg);
-            response.getOutputStream().write(JSONUtil.toJsonPrettyStr(res).getBytes(StandardCharsets.UTF_8));
+            map.put("code", 401);//401
+            map.put("msg", "请求头没有token令牌，请先登录");
+        }
+        map.put("data", authException.getMessage());
+        map.put("success", false);
+        map.put("path", request.getRequestURI());
+        map.put("timestamp", String.valueOf(System.currentTimeMillis()));
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writeValue(response.getOutputStream(), map);
+        } catch (Exception e) {
+            throw new ServletException();
         }
     }
+
 }

@@ -4,6 +4,7 @@ import com.ts.template.support.MyAccessDeniedHandler;
 import com.ts.template.support.MyUserAuthenticationEntryPoint;
 import com.ts.template.support.OptionsRequestFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ts.template.utils.UrlPathUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,6 +58,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        String[] controllerPath = UrlPathUtils.getControllerPath("com.ts.template.controller");
 
         // 防止iframe嵌套页面无法展示
         http.headers().frameOptions().disable();
@@ -68,14 +70,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 // 放行相关路径
                 .and().authorizeRequests()
-                //先放行后端路由跳转的路径
-                .antMatchers("/**/**").permitAll()
-//                .antMatchers( "/auth/", "/auth/refresh_token", "/auth/client_token","/auth/thirdparty_token"
-//                        , "/auth/page/**", "/auth/static/**").permitAll()
-//////                /dgwi/page/开头的请求要求认证
-//                .antMatchers("/smartSafetyTools/api/**").authenticated()
-//                // 其它认证
-//                .anyRequest().permitAll()
+                //后端API认证
+//                .antMatchers(controllerPath).authenticated()
+                .anyRequest().permitAll()
                 // 添加header设置，支持跨域和ajax请求
                 .and().headers().addHeaderWriter(new StaticHeadersWriter(Arrays.asList(
                 new Header("Access-control-Allow-Origin", "*"),
